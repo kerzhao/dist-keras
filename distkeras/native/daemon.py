@@ -17,7 +17,3 @@ from distkeras.networking import send_data
 import os
 
 ## END Imports. ################################################################
-
-class Daemon(object):
-
-    def __init__(self, port=6000)
