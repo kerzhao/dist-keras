@@ -99,7 +99,7 @@ def connect(host, port, disable_nagle=True):
     return fd
 
 
-def create_listening_port(disable_nagle=True):
+def allocate_listening_port(disable_nagle=True):
     fd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     if disable_nagle:
         fd.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
