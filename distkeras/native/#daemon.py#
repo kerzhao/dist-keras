@@ -20,4 +20,5 @@ import os
 
 class Daemon(object):
 
-    def __init__(self, port=6000)
+    def __init__(self):
+        

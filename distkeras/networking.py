@@ -97,3 +97,13 @@ def connect(host, port, disable_nagle=True):
     fd.connect((host, port))
 
     return fd
+
+
+def create_listening_port(disable_nagle=True):
+    fd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    if disable_nagle:
+        fd.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+    fd.bind(('0.0.0.0', 0))
+    port = int(fd.getsockname()[1])
+
+    return fd, port
