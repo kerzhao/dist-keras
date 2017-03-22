@@ -11,12 +11,16 @@ for additional training metrics.
 
 ## BEGIN Imports. ##############################################################
 
-from distkeras.networking import determine_host_address
-from distkeras.networking import allocate_udp_listening_port
 from distkeras.networking import allocate_tcp_listening_port
+from distkeras.networking import allocate_udp_listening_port
 from distkeras.networking import connect
+from distkeras.networking import determine_host_address
 from distkeras.networking import recv_data
 from distkeras.networking import send_data
+
+from distkeras.native.jobs import DataTransferJob
+
+from multiprocessing import Process
 
 import cPickle as pickle
 
@@ -113,7 +117,6 @@ class Daemon(threading.Thread):
             fd.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_JOIN_GROUP, mreq)
         # Set the socket, and allocate the multicast service thread.
         self.socket_multicast = fd
-        #self.socket_multicast.settimeout(1.0)
         self.thread_service_multicast = threading.Thread(target=self.service_multicast)
         self.thread_service_multicast.start()
 
@@ -123,21 +126,45 @@ class Daemon(threading.Thread):
         self.socket.settimeout(1.0)
         self.port_allocation = port
 
+    def allocate_session(self, identifier):
+        # Construct a dictionary.
+        d = {
+            DataTransferJob.IDENTIFIER: allocate_data_transfer_session
+        }
+        # Choose the session allocation function.
+        session = d[identifier]()
+
+        return session
+
+    def allocate_process(self, identifier):
+        session = self.allocate_session(identifier)
+        address = session.get_host_address()
+        port = session.get_port()
+        p = Process(target=session.run)
+        p.start()
+
+        return address, port
+
     def handle_allocation_connection(self, conn, addr):
-        # Receive the datastructure from the connection.
         data = recv_data(conn)
-        print(data)
-        # TODO Implement.
+        identifier = data['job_identifier']
+        address, port = self.allocate_process(identifier)
+        data = {}
+        data['address'] = address
+        data['port'] = port
+        send_data(conn, data)
 
     def start(self):
         self.initialize_multicast_service()
         self.initialize_allocation_service()
+        super(Daemon, self).start()
 
     def run(self):
         while self.running:
             try:
                 conn, addr = self.socket.accept()
                 self.handle_allocation_connection(conn, addr)
+                conn.close()
             except:
                 pass
 
@@ -150,3 +177,109 @@ class Daemon(threading.Thread):
         self.thread_service_multicast.join()
 
 ## END Daemon. #################################################################
+
+## BEGIN Daemon sessions. ######################################################
+
+class Session(object):
+
+    def __init__(self):
+        self.socket = None
+        self.host_address = determine_host_address()
+        self.port = 0
+
+    def get_host_address(self):
+        return self.host_address
+
+    def set_port(self, port):
+        self.port = port
+
+    def set_socket(self, socket):
+        self.socket = socket
+
+    def get_port(self):
+        return self.port
+
+    def get_socket(self):
+        return self.socket
+
+    def close_socket(self):
+        self.socket.close()
+
+    def run(self):
+        raise NotImplementedError
+
+
+def allocate_data_transfer_session():
+    session = DataTransferSession()
+
+    return session
+
+class DataTransferSession(Session):
+
+    TRANSFER_CHUNKS = 65536
+
+    def __init__(self):
+        Session.__init__(self)
+        # Allocate a listening TCP port.
+        socket, port = allocate_tcp_listening_port()
+        self.set_socket(socket)
+        self.set_port(port)
+        self.transferring = True
+        self.transfer_socket = None
+
+    def create_directory(self, path):
+        # Create the directory.
+        os.makedirs(path)
+        # Notify the client that the creating is succesfull.
+        response = {}
+        response['path'] = path
+        response['status'] = True
+        send_data(self.transfer_socket, response)
+
+    def receive_file(self, path, file_size):
+         # Notify the client that the file is going to be created.
+        response = {}
+        response['path'] = path
+        response['status'] = False
+        response['creating'] = True
+        send_data(self.transfer_socket, response)
+        bytes_read = 0
+        with open(path, "wb") as f:
+            while bytes_read < file_size:
+                buffer = self.transfer_socket.recv(self.TRANSFER_CHUNKS)
+                bytes_read += len(buffer)
+                f.write(buffer)
+        # Notify the client that the creating is succesfull.
+        response = {}
+        response['path'] = path
+        response['status'] = True
+        send_data(self.transfer_socket, response)
+
+    def run(self):
+        conn, addr = self.socket.accept()
+        self.transfer_socket = conn
+        while self.transferring:
+            # Fetch the next header.
+            header = recv_data(conn)
+            # Fetch the required parameters.
+            path = header['path']
+            is_directory = header['is_dir']
+            self.transferring = not header['stop_transfer']
+            if not self.transferring:
+                break
+            # Check if the path exists on the local machine.
+            if os.path.exists(path):
+                response = {}
+                response['path'] = path
+                response['status'] = False
+                send_data(self.transfer_socket, response)
+                continue
+            if is_directory:
+                self.create_directory(path)
+            else:
+                file_size = header['file_size']
+                self.receive_file(path, file_size)
+        conn.close()
+        self.close_socket()
+
+## END Daemon sessions. ########################################################
