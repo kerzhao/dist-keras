@@ -72,7 +72,6 @@ class Daemon(threading.Thread):
             data = {}
             data['address'] = determine_host_address()
             data['port'] = self.port_allocation
-            print("Sending data to " + address)
             send_data(fd, data)
             # Close the connection.
             fd.close()
