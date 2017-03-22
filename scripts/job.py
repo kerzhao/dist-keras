@@ -7,5 +7,5 @@ from distkeras.native.jobs import DataTransferJob
 
 ## END Imports. ################################################################
 
-job = DataTransferJob("/home/joeri/experiments", "/home/joeri/experiments_nieuw")
+job = DataTransferJob("/home/joeri/experiments", "/afs/cern.ch/user/j/jhermans/experiments")
 job.run()

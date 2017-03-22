@@ -36,7 +36,7 @@ class Job(object):
 
     MULTICAST_GROUP = '224.1.1.1'
     MULTICAST_PORT = 6000
-    MULTICAST_TTL = 3
+    MULTICAST_TTL = 10
 
     def __init__(self):
         # Set default multicast properties.
@@ -95,9 +95,9 @@ class Job(object):
         # Broadcast the job announcement.
         self.broadcast_job_announcement(host_address, port)
         # Wait for the daemons to connect, and supply their connection information.
-        fd.settimeout(0.5)
+        fd.settimeout(1)
         attempts = 0
-        while attempts <= 2:
+        while attempts <= 5:
             try:
                 # Accept a connection from the socket.
                 conn, addr = fd.accept()
