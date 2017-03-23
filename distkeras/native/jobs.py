@@ -308,6 +308,7 @@ class TrainingJob(Job):
         self.metrics = None
         self.parameter_servers = []
         self.workers = []
+        self.worker_control_threads = []
 
     def get_model(self):
         return self.model
@@ -323,6 +324,8 @@ class TrainingJob(Job):
         send_data(fd, header)
         # Wait for the allocated parameter server description.
         response = recv_data(fd)
+        weight_allocation = self.parameters['weight_allocations'][identifier]
+        response['description'][1] += (weight_allocation,)
         ps_description = response['description']
         # Append the description of the allocated parameter server.
         self.parameter_servers.append(ps_description)
@@ -364,11 +367,35 @@ class TrainingJob(Job):
             fd.close()
             allocated_workers += 1
 
+    def handle_worker(self, address, port):
+        # Connect with the remote worker.
+        fd = connect(address, port)
+        # Send worker ports.
+        worker_information = [info[1] for info in self.parameter_servers]
+        data = {'parameter_servers': worker_information}
+        send_data(fd, data)
+        data = recv_data(fd)
+        if data['status']:
+            # Tell the worker to start the training procedure.
+            data = {'start': True}
+            send_data(fd, data)
+            # Wait for the training completion.
+            data = recv_data(fd)
+            # TODO Remove debugging information.
+            print(data)
+        # Close the connection with the remote worker.
+        fd.close()
+
     def start_training(self):
-        raise NotImplementedError
+        # Obtain parameter servers information, with weight allocations.
+        for w in self.workers:
+            t = threading.Thread(target=self.handle_worker, args=(w))
+            t.start()
+            self.worker_control_threads.append(t)
 
     def wait_training_completion(self):
-        raise NotImplementedError
+        for t in self.worker_control_threads:
+            t.join()
 
     def fetch_model(self):
         raise NotImplementedError
@@ -392,8 +419,8 @@ class TrainingJob(Job):
         self.collect_daemons()
         self.allocate_parameter_servers()
         self.allocate_workers()
-        #self.start_training()
-        #self.wait_training_completion()
+        self.start_training()
+        self.wait_training_completion()
         #self.fetch_model()
         #self.fetch_metrics()
         self.destroy_parameter_servers()

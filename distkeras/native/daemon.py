@@ -25,6 +25,7 @@ from distkeras.utils import serialize_keras_model
 from distkeras.utils import deserialize_keras_model
 
 from distkeras.native.parameter_servers import ParameterServer
+from distkeras.native.workers import Worker
 
 from multiprocessing import Process
 
@@ -345,20 +346,53 @@ class WorkerSession(Session):
 
     def __init__(self):
         Session.__init__(self)
-        # TODO Implement.
-        print("Allocated worker session")
+        # Allocate a port for worker control.
+        socket, port = allocate_tcp_listening_port()
+        self.control_socket = socket
+        self.control_port = port
+        self.control_connection = None
+        # Worker instance.
+        self.worker = None
 
     def get_description(self):
-        # TODO Implement.
-        return None
+        return (self.host_address, self.control_port)
 
     def process_parameters(self):
-        # TODO Implement.
-        print("Processing worker parameters")
+        try:
+            self.worker = Worker()
+        except Exception as e:
+            print(e)
+
+    def handle_control_connection(self):
+        try:
+            conn, addr = self.control_socket.accept()
+            self.control_connection = conn
+            # Obtain parameter server information.
+            data = recv_data(conn)
+            parameter_servers = data['parameter_servers']
+            # Set the parameter server in the worker.
+            self.worker.set_parameter_servers(parameter_servers)
+            # Send confirmation.
+            data = {'status': True}
+            send_data(conn, data)
+            # Wait for the job to tell us to start the training.
+            data = recv_data(conn)
+            if data['start']:
+                self.worker.start()
+        except Exception as e:
+            print(e)
 
     def run(self):
-        # TODO Implement.
-        print("Running worker session")
+        # Wait for a control connection.
+        self.handle_control_connection()
+        # Wait for the worker to finish.
+        self.worker.join()
+        # Send the job that we're done.
+        data = {'done': True}
+        send_data(self.control_connection, data)
+        # Close the control port.
+        self.control_socket.close()
+        self.control_connection.close()
 
 
 ## END Daemon sessions. ########################################################
