@@ -34,7 +34,7 @@ class Job(object):
     dependencies depending on the parameterization of the job.
     """
 
-    MULTICAST_GROUP = '224.1.1.1'
+    MULTICAST_GROUP = '225.0.0.250'
     MULTICAST_PORT = 6000
     MULTICAST_TTL = 10
 
@@ -46,6 +46,8 @@ class Job(object):
         # Initialize list of job processes.
         self.job_processes = []
         self.num_job_processes = 0
+        # Set the list of daemons which have been specified by the user.
+        self.daemons = []
 
     def set_multicast_group(self, group):
         self.multicast_group = group
@@ -64,6 +66,15 @@ class Job(object):
 
     def get_multicast_ttl(self):
         return self.multicast_ttl
+
+    def num_daemons(self):
+        return len(self.daemons)
+
+    def has_daemons(self):
+        return self.num_daemons() > 0
+
+    def add_daemons(self, daemon_description):
+        self.daemons.append(daemon_description)
 
     def broadcast_job_announcement(self, address, port):
         addrinfo = socket.getaddrinfo(self.multicast_group, None)[0]
@@ -87,7 +98,10 @@ class Job(object):
         """Returns all daemons listening to the specified broadcast address."""
         daemons = []
 
-        print("Collecting daemons")
+        # Check if a daemons list has already been specified.
+        if self.has_daemons():
+            return self.daemons
+
         # Allocate a port which handles the negotiation with the controller daemon.
         fd, port = allocate_tcp_listening_port()
         # Obtain the host address,
@@ -110,6 +124,8 @@ class Job(object):
                 attempts += 1
         # We have all the information, close the socket.
         fd.close()
+        # Set the daemon list.
+        self.daemons = daemons
 
         return daemons
 

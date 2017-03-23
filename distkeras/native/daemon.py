@@ -42,7 +42,7 @@ class Daemon(threading.Thread):
 
     PORT_MULTICAST = 6000
     DGRAM_BUFFER_SIZE = 10000
-    MULTICAST_GROUP = '224.1.1.1'
+    MULTICAST_GROUP = '225.0.0.250'
 
     def __init__(self):
         # Allocate superclass members.
