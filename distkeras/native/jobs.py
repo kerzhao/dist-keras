@@ -73,8 +73,12 @@ class Job(object):
     def has_daemons(self):
         return self.num_daemons() > 0
 
-    def add_daemons(self, daemon_description):
+    def add_daemon(self, daemon_description):
         self.daemons.append(daemon_description)
+
+    def add_damons(self, daemon_descriptions):
+        for d in daemon_descriptions:
+            self.add_daemon(d)
 
     def broadcast_job_announcement(self, address, port):
         addrinfo = socket.getaddrinfo(self.multicast_group, None)[0]
@@ -153,8 +157,6 @@ class DataTransferJob(Job):
         # Specify job specific parameters.
         self.path_source = path_source
         self.path_destination = path_destination
-        # Holds the socket which is connected with the process.
-        self.socket = None
         # List container process information, same structure as daemons.
         self.processes = []
         self.processes_mutex = threading.Lock()
@@ -194,7 +196,7 @@ class DataTransferJob(Job):
 
         return paths
 
-    def create_remote_directory(self, path):
+    def create_remote_directory(self, fd, path):
         # Specify the remote path.
         remote_path = path.replace(self.path_source, self.path_destination, 1)
         # Construct the message header.
@@ -203,12 +205,12 @@ class DataTransferJob(Job):
         data['is_dir'] = True
         data['stop_transfer'] = False
         # Send the information.
-        send_data(self.socket, data)
+        send_data(fd, data)
         # Wait for confirmation.
-        response = recv_data(self.socket)
+        response = recv_data(fd)
         print(response['path'] + " - " + str(response['status']))
 
-    def transfer_file(self, path):
+    def transfer_file(self, fd, path):
         # Specify the remote path.
         remote_path = path.replace(self.path_source, self.path_destination, 1)
         # Retrieve other statistics about the local file.
@@ -218,9 +220,9 @@ class DataTransferJob(Job):
         header['is_dir'] = False
         header['stop_transfer'] = False
         header['file_size'] = file_size
-        send_data(self.socket, header)
+        send_data(fd, header)
         # Check if the file is going to be created.
-        response = recv_data(self.socket)
+        response = recv_data(fd)
         if 'creating' in response and response['creating']:
             # Read the file, and send the buffers.
             bytes_sent = 0
@@ -228,31 +230,30 @@ class DataTransferJob(Job):
                 while bytes_sent < file_size:
                     buffer = f.read(self.TRANSFER_CHUNKS)
                     bytes_sent += len(buffer)
-                    self.socket.sendall(buffer)
+                    fd.sendall(buffer)
             # Wait for the response to check if the remote process created our file.
-            response = recv_data(self.socket)
+            response = recv_data(fd)
         print(response['path'] + " - " + str(response['status']))
 
-    def stop_transfer(self):
+    def stop_transfer(self, fd):
         header = {}
         header['path'] = '/'
         header['is_dir'] = True
         header['stop_transfer'] = True
-        send_data(self.socket, header)
+        send_data(fd, header)
 
     def transfer(self, address, port):
         # Connect with the remote process.
         fd = connect(address, port, disable_nagle=False)
-        self.socket = fd
         file_paths = self.obtain_file_paths()
         # Send the files to the remote process.
         for f in file_paths:
             if os.path.isdir(f):
-                self.create_remote_directory(f)
+                self.create_remote_directory(fd, f)
             else:
-                self.transfer_file(f)
+                self.transfer_file(fd, f)
         # Stop the transfer.
-        self.stop_transfer()
+        self.stop_transfer(fd)
         # Close the file descriptor.
         fd.close()
 
