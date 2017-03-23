@@ -17,3 +17,8 @@ import socket
 import threading
 
 ## END Imports. ################################################################
+
+class Worker(object):
+
+    def __init__(self, model):
+        self.model = model

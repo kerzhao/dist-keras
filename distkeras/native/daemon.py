@@ -19,6 +19,12 @@ from distkeras.networking import recv_data
 from distkeras.networking import send_data
 
 from distkeras.native.jobs import DataTransferJob
+from distkeras.native.jobs import TrainingJob
+
+from distkeras.utils import serialize_keras_model
+from distkeras.utils import deserialize_keras_model
+
+from distkeras.native.parameter_servers import ParameterServer
 
 from multiprocessing import Process
 
@@ -129,29 +135,32 @@ class Daemon(threading.Thread):
     def allocate_session(self, identifier):
         # Construct a dictionary.
         d = {
-            DataTransferJob.IDENTIFIER: allocate_data_transfer_session
+            DataTransferJob.IDENTIFIER: allocate_data_transfer_session,
+            TrainingJob.IDENTIFIER_ALLOCATE_PS: allocate_parameter_server_session,
+            TrainingJob.IDENTIFIER_ALLOCATE_WORKER: allocate_worker_session
         }
         # Choose the session allocation function.
         session = d[identifier]()
 
         return session
 
-    def allocate_process(self, identifier):
+    def allocate_process(self, identifier, parameters):
         session = self.allocate_session(identifier)
-        address = session.get_host_address()
-        port = session.get_port()
+        description = session.get_description()
+        session.set_parameters(parameters)
+        session.process_parameters()
         p = Process(target=session.run)
         p.start()
 
-        return address, port
+        return description
 
     def handle_allocation_connection(self, conn, addr):
         data = recv_data(conn)
         identifier = data['job_identifier']
-        address, port = self.allocate_process(identifier)
+        parameters = data['parameters']
+        description = self.allocate_process(identifier, parameters)
         data = {}
-        data['address'] = address
-        data['port'] = port
+        data['description'] = description
         send_data(conn, data)
 
     def start(self):
@@ -183,27 +192,18 @@ class Daemon(threading.Thread):
 class Session(object):
 
     def __init__(self):
-        self.socket = None
+        self.parameters = None
         self.host_address = determine_host_address()
-        self.port = 0
 
-    def get_host_address(self):
-        return self.host_address
+    def set_parameters(self, parameters):
+        self.parameters = parameters
 
-    def set_port(self, port):
-        self.port = port
+    def process_parameters(self):
+        # Nothing to do here.
+        pass
 
-    def set_socket(self, socket):
-        self.socket = socket
-
-    def get_port(self):
-        return self.port
-
-    def get_socket(self):
-        return self.socket
-
-    def close_socket(self):
-        self.socket.close()
+    def get_description(self):
+        raise NotImplementedError
 
     def run(self):
         raise NotImplementedError
@@ -222,10 +222,14 @@ class DataTransferSession(Session):
         Session.__init__(self)
         # Allocate a listening TCP port.
         socket, port = allocate_tcp_listening_port()
-        self.set_socket(socket)
-        self.set_port(port)
+        self.socket = socket
+        self.port = port
+        # Set data transfer settings.
         self.transferring = True
         self.transfer_socket = None
+
+    def get_description(self):
+        return (self.host_address, self.port)
 
     def create_directory(self, path):
         # Create the directory.
@@ -281,5 +285,80 @@ class DataTransferSession(Session):
                 self.receive_file(path, file_size)
         conn.close()
         self.close_socket()
+
+
+def allocate_parameter_server_session():
+    return ParameterServerSession()
+
+class ParameterServerSession(Session):
+
+    def __init__(self):
+        Session.__init__(self)
+        # Allocate a port for job-control.
+        socket, port = allocate_tcp_listening_port()
+        self.control_socket = socket
+        self.control_port = port
+        # Allocate a port for worker communications.
+        socket, port = allocate_tcp_listening_port()
+        self.worker_socket = socket
+        self.worker_port = port
+        # Parameter Server instance.
+        self.ps = None
+
+    def get_description(self):
+        control_description = (self.host_address, self.control_port)
+        ps_description = (self.host_address, self.worker_port)
+
+        return [control_description, ps_description]
+
+    def process_parameters(self):
+        identifier = self.parameters['parameter_server_identifier']
+        model = deserialize_keras_model(self.parameters['model'])
+        try:
+            self.ps = ParameterServer(identifier, self.worker_socket, self.worker_port, model, self.parameters)
+            self.ps.start()
+        except Exception as e:
+            print(e)
+
+    def handle_control_connection(self):
+        try:
+            conn, addr = self.control_socket.accept()
+            self.ps.stop()
+            conn.close()
+        except Exception as e:
+            print(e)
+
+    def run(self):
+        # Wait for a control connection.
+        self.handle_control_connection()
+        # Wait for the parameter server to stop gracefully.
+        self.ps.join()
+        # Close the control and worker ports.
+        # Note the worker port is closed by the PS.
+        self.control_socket.close()
+
+
+def allocate_worker_session():
+    return WorkerSession()
+
+class WorkerSession(Session):
+
+    def __init__(self):
+        Session.__init__(self)
+        # TODO Implement.
+        print("Allocated worker session")
+
+    def get_description(self):
+        # TODO Implement.
+        return None
+
+    def process_parameters(self):
+        # TODO Implement.
+        print("Processing worker parameters")
+
+    def run(self):
+        # TODO Implement.
+        print("Running worker session")
+
 
 ## END Daemon sessions. ########################################################

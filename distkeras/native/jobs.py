@@ -12,15 +12,22 @@ from distkeras.networking import send_data
 from distkeras.networking import allocate_tcp_listening_port
 from distkeras.networking import determine_host_address
 
+from distkeras.utils import serialize_keras_model
+from distkeras.utils import deserialize_keras_model
+
 import socket
 
 import os
 
 import struct
 
+import time
+
 import cPickle as pickle
 
 import threading
+
+import random
 
 ## END Imports. ################################################################
 
@@ -167,11 +174,12 @@ class DataTransferJob(Job):
         # Prepare the job parameters.
         data = {}
         data['job_identifier'] = self.IDENTIFIER
+        data['parameters'] = {}
         # Send the job parameters.
         send_data(fd, data)
         # Receive the address and port of the transfer process.
         data = recv_data(fd)
-        description = (data['address'], data['port'])
+        description = data['description']
         with self.processes_mutex:
             self.processes.append(description)
         fd.close()
@@ -285,5 +293,111 @@ class DataTransferJob(Job):
         # Wait for transfer completion.
         for t in threads:
             t.join()
+
+
+class TrainingJob(Job):
+
+    IDENTIFIER = 'train'
+    IDENTIFIER_ALLOCATE_PS = 'allocate-parameter-server'
+    IDENTIFIER_ALLOCATE_WORKER = 'allocate-worker'
+
+    def __init__(self, model, parameters):
+        Job.__init__(self)
+        self.model = model
+        self.parameters = parameters
+        self.metrics = None
+        self.parameter_servers = []
+        self.workers = []
+
+    def get_model(self):
+        return self.model
+
+    def allocate_parameter_server(self, fd, identifier):
+        # Allocate the header for parameter server allocation.
+        header = {}
+        header['job_identifier'] = self.IDENTIFIER_ALLOCATE_PS
+        header['parameters'] = self.parameters
+        header['parameters']['model'] = serialize_keras_model(self.model)
+        header['parameters']['parameter_server_identifier'] = identifier
+        # Send the request the daemon for allocation.
+        send_data(fd, header)
+        # Wait for the allocated parameter server description.
+        response = recv_data(fd)
+        ps_description = response['description']
+        # Append the description of the allocated parameter server.
+        self.parameter_servers.append(ps_description)
+
+    def allocate_parameter_servers(self):
+        num_parameter_servers = self.parameters['num_parameter_servers']
+        allocated_parameter_servers = 0
+        while allocated_parameter_servers < num_parameter_servers:
+            daemon = random.choice(self.daemons)
+            ps_identifier = allocated_parameter_servers
+            fd = connect(daemon[0], daemon[1])
+            self.allocate_parameter_server(fd, ps_identifier)
+            fd.close()
+            allocated_parameter_servers += 1
+
+    def allocate_worker(self, fd, identifier):
+        # Allocate the header for the worker allocation.
+        header = {}
+        header['job_identifier'] = self.IDENTIFIER_ALLOCATE_WORKER
+        header['parameters'] = self.parameters
+        header['parameters']['model'] = serialize_keras_model(self.model)
+        header['parameters']['worker_identifier'] = identifier
+        # Send the request to the daemon for allocation.
+        send_data(fd, header)
+        # Wait for the allocated parameter server description.
+        response = recv_data(fd)
+        worker_description = response['description']
+        # Append the worker description.
+        self.workers.append(worker_description)
+
+    def allocate_workers(self):
+        num_workers = self.parameters['num_workers']
+        allocated_workers = 0
+        while allocated_workers < num_workers:
+            daemon = random.choice(self.daemons)
+            worker_identifier = allocated_workers
+            fd = connect(daemon[0], daemon[1])
+            self.allocate_worker(fd, worker_identifier)
+            fd.close()
+            allocated_workers += 1
+
+    def start_training(self):
+        raise NotImplementedError
+
+    def wait_training_completion(self):
+        raise NotImplementedError
+
+    def fetch_model(self):
+        raise NotImplementedError
+
+    def fetch_metrics(self):
+        raise NotImplementedError
+
+    def destroy_parameter_servers(self):
+        for ps in self.parameter_servers:
+            # Obtain the control address and port.
+            control_address = ps[0][0]
+            control_port = ps[0][1]
+            # Ping the parameter server to stop.
+            fd = connect(control_address, control_port)
+            fd.close()
+
+    def destroy_workers(self):
+        raise NotImplementedError
+
+    def run(self):
+        self.collect_daemons()
+        self.allocate_parameter_servers()
+        self.allocate_workers()
+        #self.start_training()
+        #self.wait_training_completion()
+        #self.fetch_model()
+        #self.fetch_metrics()
+        self.destroy_parameter_servers()
+        #self.destroy_workers()
+
 
 ## END Job definitions. ########################################################
