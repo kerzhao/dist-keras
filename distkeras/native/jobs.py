@@ -130,7 +130,7 @@ class Job(object):
                 description = (data['address'], data['port'])
                 daemons.append(description)
                 conn.close()
-            except Exception as e:
+            except:
                 # Increase the number of attempts.
                 attempts += 1
         # We have all the information, close the socket.
@@ -318,7 +318,6 @@ class TrainingJob(Job):
         header = {}
         header['job_identifier'] = self.IDENTIFIER_ALLOCATE_PS
         header['parameters'] = self.parameters
-        header['parameters']['model'] = serialize_keras_model(self.model)
         header['parameters']['parameter_server_identifier'] = identifier
         # Send the request the daemon for allocation.
         send_data(fd, header)
@@ -346,7 +345,6 @@ class TrainingJob(Job):
         header = {}
         header['job_identifier'] = self.IDENTIFIER_ALLOCATE_WORKER
         header['parameters'] = self.parameters
-        header['parameters']['model'] = serialize_keras_model(self.model)
         header['parameters']['worker_identifier'] = identifier
         # Send the request to the daemon for allocation.
         send_data(fd, header)
@@ -372,7 +370,8 @@ class TrainingJob(Job):
         fd = connect(address, port)
         # Send worker ports.
         worker_information = [info[1] for info in self.parameter_servers]
-        data = {'parameter_servers': worker_information}
+        data = {'parameter_servers': worker_information,
+                'model': serialize_keras_model(self.model)}
         send_data(fd, data)
         data = recv_data(fd)
         if data['status']:
@@ -397,6 +396,21 @@ class TrainingJob(Job):
         for t in self.worker_control_threads:
             t.join()
 
+    def prepare_parameter_servers(self):
+        print("Preparing parameter servers")
+        time.sleep(2)
+        # Connect to the control ports of all parameter servers, and start the PS.
+        for ps in self.parameter_servers:
+            # Obtain the control address and port.
+            control_address = ps[0][0]
+            control_port = ps[0][1]
+            fd = connect(control_address, control_port)
+            print(control_address, control_port)
+            data = {'parameters': self.parameters,
+                    'model': serialize_keras_model(self.model)}
+            send_data(fd, data)
+            ps.append(fd)
+
     def fetch_model(self):
         raise NotImplementedError
 
@@ -408,8 +422,10 @@ class TrainingJob(Job):
             # Obtain the control address and port.
             control_address = ps[0][0]
             control_port = ps[0][1]
-            # Ping the parameter server to stop.
-            fd = connect(control_address, control_port)
+            fd = ps[2]
+            # Send the stop message.
+            data = {'stop': True}
+            send_data(fd, data)
             fd.close()
 
     def destroy_workers(self):
@@ -417,8 +433,12 @@ class TrainingJob(Job):
 
     def run(self):
         self.collect_daemons()
+        # Prepare the resources.
         self.allocate_parameter_servers()
         self.allocate_workers()
+        # Prepare the resources.
+        self.prepare_parameter_servers()
+        # Start the training procedure.
         self.start_training()
         self.wait_training_completion()
         #self.fetch_model()

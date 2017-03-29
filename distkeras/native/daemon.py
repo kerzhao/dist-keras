@@ -18,15 +18,6 @@ from distkeras.networking import determine_host_address
 from distkeras.networking import recv_data
 from distkeras.networking import send_data
 
-from distkeras.native.jobs import DataTransferJob
-from distkeras.native.jobs import TrainingJob
-
-from distkeras.utils import serialize_keras_model
-from distkeras.utils import deserialize_keras_model
-
-from distkeras.native.parameter_servers import ParameterServer
-from distkeras.native.workers import Worker
-
 from multiprocessing import Process
 
 import cPickle as pickle
@@ -65,9 +56,13 @@ class Daemon(threading.Thread):
         self.thread_service_multicast = None
         self.threads_multicast = []
         self.threads_allocation = []
+        self.scripts_directory = "."
 
     def set_port_multicast(self, port):
         self.port_multicast = port
+
+    def set_scripts_directory(self, directory):
+        self.scripts_directory = directory
 
     def set_port_allocation(self, port):
         self.port_allocation = port
@@ -136,9 +131,9 @@ class Daemon(threading.Thread):
     def allocate_session(self, identifier):
         # Construct a dictionary.
         d = {
-            DataTransferJob.IDENTIFIER: allocate_data_transfer_session,
-            TrainingJob.IDENTIFIER_ALLOCATE_PS: allocate_parameter_server_session,
-            TrainingJob.IDENTIFIER_ALLOCATE_WORKER: allocate_worker_session
+            'data-transfer': allocate_data_transfer_session,
+            'allocate-parameter-server': allocate_parameter_server_session,
+            'allocate-worker': allocate_worker_session
         }
         # Choose the session allocation function.
         session = d[identifier]()
@@ -148,10 +143,16 @@ class Daemon(threading.Thread):
     def allocate_process(self, identifier, parameters):
         session = self.allocate_session(identifier)
         description = session.get_description()
-        session.set_parameters(parameters)
-        session.process_parameters()
-        p = Process(target=session.run)
-        p.start()
+        try:
+            session.set_parameters(parameters)
+            session.process_parameters()
+        except Exception as e:
+            print(e)
+        code = os.fork()
+        if code == 0:
+            print("Running session")
+            session.run()
+            exit(0)
 
         return description
 
@@ -293,18 +294,25 @@ def allocate_parameter_server_session():
 
 class ParameterServerSession(Session):
 
-    def __init__(self):
+    def __init__(self, port_control=0, port_listening=0):
         Session.__init__(self)
         # Allocate a port for job-control.
-        socket, port = allocate_tcp_listening_port()
+        socket, port = allocate_tcp_listening_port(port=port_control)
         self.control_socket = socket
         self.control_port = port
         # Allocate a port for worker communications.
-        socket, port = allocate_tcp_listening_port()
+        socket, port = allocate_tcp_listening_port(port=port_listening)
         self.worker_socket = socket
         self.worker_port = port
+        self.identifier = None
         # Parameter Server instance.
         self.ps = None
+
+    def close_control_port(self):
+        self.control_socket.close()
+
+    def close_worker_port(self):
+        self.worker_port.close()
 
     def get_description(self):
         control_description = (self.host_address, self.control_port)
@@ -313,30 +321,24 @@ class ParameterServerSession(Session):
         return [control_description, ps_description]
 
     def process_parameters(self):
-        identifier = self.parameters['parameter_server_identifier']
-        model = deserialize_keras_model(self.parameters['model'])
-        try:
-            self.ps = ParameterServer(identifier, self.worker_socket, self.worker_port, model, self.parameters)
-            self.ps.start()
-        except Exception as e:
-            print(e)
-
-    def handle_control_connection(self):
-        try:
-            conn, addr = self.control_socket.accept()
-            self.ps.stop()
-            conn.close()
-        except Exception as e:
-            print(e)
+        self.identifier = self.parameters['parameter_server_identifier']
 
     def run(self):
-        # Wait for a control connection.
-        self.handle_control_connection()
-        # Wait for the parameter server to stop gracefully.
-        self.ps.join()
-        # Close the control and worker ports.
-        # Note the worker port is closed by the PS.
+        # Close the sockets for later reuse.
         self.control_socket.close()
+        self.worker_socket.close()
+        # Run the subprocesses.
+        parameters = {}
+        parameters['--identifier'] = self.identifier
+        parameters['--worker-port'] = self.worker_port
+        parameters['--control-port'] = self.control_port
+        # Build the command.
+        command = "python /home/joeri/Workspace/dist-keras/scripts/parameter_server.py "
+        for parameter_key in parameters:
+            command += parameter_key + "=" + str(parameters[parameter_key]) + " "
+        print(command)
+        # Execute the command.
+        os.system(command)
 
 
 def allocate_worker_session():
@@ -359,7 +361,9 @@ class WorkerSession(Session):
 
     def process_parameters(self):
         try:
-            self.worker = Worker()
+            #self.worker = Worker()
+            #self.worker.set_parameters(self.parameters)
+            print("Worker allocated")
         except Exception as e:
             print(e)
 
@@ -371,22 +375,24 @@ class WorkerSession(Session):
             data = recv_data(conn)
             parameter_servers = data['parameter_servers']
             # Set the parameter server in the worker.
-            self.worker.set_parameter_servers(parameter_servers)
+            #self.worker.set_parameter_servers(parameter_servers)
             # Send confirmation.
             data = {'status': True}
             send_data(conn, data)
             # Wait for the job to tell us to start the training.
             data = recv_data(conn)
             if data['start']:
-                self.worker.start()
+                pass
+                #self.worker.start()
         except Exception as e:
             print(e)
 
     def run(self):
+        print("Worker running")
         # Wait for a control connection.
         self.handle_control_connection()
         # Wait for the worker to finish.
-        self.worker.join()
+        #self.worker.join()
         # Send the job that we're done.
         data = {'done': True}
         send_data(self.control_connection, data)

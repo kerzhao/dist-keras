@@ -9,9 +9,13 @@ from distkeras.networking import allocate_tcp_listening_port
 from distkeras.networking import recv_data
 from distkeras.networking import send_data
 
+from distkeras.utils import deserialize_keras_model
+
 import numpy as np
 
 import threading
+
+import os
 
 ## END Imports. ################################################################
 
@@ -20,6 +24,7 @@ class ParameterServer(threading.Thread):
     def __init__(self, identifier, listening_socket, port, model, parameters):
         threading.Thread.__init__(self)
         # Initialize default parameter server
+        self.parameters = parameters
         self.identifier = identifier
         self.socket = listening_socket
         self.port = port
@@ -28,14 +33,13 @@ class ParameterServer(threading.Thread):
         self.locks = {}
         self.connections = []
         self.running = False
-        # Setup the weight matrixes based on the parameters.
-        self.setup_parameter_server(model, parameters)
+        self.model = model
 
-    def setup_parameter_server(self, model, parameters):
+    def setup_parameter_server(self):
         # Fetch the weights of the models.
-        weights = np.asarray(model.get_weights())
+        weights = np.asarray(self.model.get_weights())
         # Fetch the weight allocations.
-        weight_allocations = parameters['weight_allocations'][self.identifier]
+        weight_allocations = self.parameters['weight_allocations'][self.identifier]
         # Set the weight allocations.
         for index in weight_allocations:
             w = weights[index]
@@ -51,10 +55,12 @@ class ParameterServer(threading.Thread):
         super(ParameterServer, self).start()
 
     def run(self):
+        # Setup the weight matrixes based on the parameters.
+        self.setup_parameter_server()
         while self.running:
             try:
                 conn, addr = self.socket.accept()
-                thread = threading.Thread(target=self.handle_connection, args=(conn))
+                thread = threading.Thread(target=self.handle_connection, args=(conn,))
                 thread.start()
                 self.connections.append(thread)
             except:
@@ -83,14 +89,20 @@ class ParameterServer(threading.Thread):
         send_data(fd, data)
 
     def handle_connection(self, fd):
-        while self.running:
-            action = fd.recv(1).decode()
-            if action == 'c':
-                self.handle_commit(fd)
-            elif action == 'p':
-                self.handle_pull(fd)
-            else:
-                self.running = False
+        try:
+            # Handling socket
+            while self.running:
+                action = fd.recv(1).decode()
+                if action == 'c':
+                    self.handle_commit(fd)
+                elif action == 'p':
+                    self.handle_pull(fd)
+                else:
+                    break
+            # Close the socket.
+            fd.close()
+        except Exception as e:
+            print(e)
 
     def cancel_accept(self):
         try:
