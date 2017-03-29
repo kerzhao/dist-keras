@@ -40,11 +40,17 @@ model.add(Activation('softmax'))
 # Summarize the model.
 model.summary()
 
-# Define the training parameters.
+# Define infrastructure parameters.
 parameters = {}
 parameters['num_parameter_servers'] = 1
 parameters['weight_allocations'] = [[0, 2, 4, 6]]
 parameters['num_workers'] = 1
+# Define training parameters.
+parameters['worker_optimizer'] = 'adam'
+parameters['loss'] = 'categorical_crossentropy'
+parameters['communication_frequency'] = 1
+parameters['num_epochs'] = 1
+parameters['batch_size'] = 128
 
 job = TrainingJob(model, parameters)
 job.run()

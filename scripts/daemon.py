@@ -23,10 +23,11 @@ g_daemon = None
 
 def parse_arguments():
     parser = optparse.OptionParser()
-    parser.set_defaults(multicast_port=Daemon.PORT_MULTICAST, allocation_port=0, group=None)
+    parser.set_defaults(multicast_port=Daemon.PORT_MULTICAST, allocation_port=0, group=None, scripts=".")
     parser.add_option('--port-multicast', action='store', dest='multicast_port', type='int')
     parser.add_option('--port-allocation', action='store', dest='allocation_port', type='int')
     parser.add_option('--group', action='store', dest='group', type='string')
+    parser.add_option('--scripts-directory', action='store', dest='scripts', type='string')
     (options, args) = parser.parse_args()
 
     return options
@@ -53,10 +54,12 @@ def main():
     port_multicast = options.multicast_port
     port_allocation = options.allocation_port
     group = options.group
+    scripts_directory = options.scripts
     # Set the signal handlers.
     signal.signal(signal.SIGINT, handle_signal_sigint)
     # Allocate the daemon, and start the process.
     daemon = allocate_daemon(port_multicast, port_allocation, group)
+    daemon.set_scripts_directory(scripts_directory)
     g_daemon = daemon
     daemon.start()
     signal.pause()
