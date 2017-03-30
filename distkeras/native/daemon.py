@@ -308,12 +308,6 @@ class ParameterServerSession(Session):
         # Parameter Server instance.
         self.ps = None
 
-    def close_control_port(self):
-        self.control_socket.close()
-
-    def close_worker_port(self):
-        self.worker_port.close()
-
     def get_description(self):
         control_description = (self.host_address, self.control_port)
         ps_description = (self.host_address, self.worker_port)
@@ -336,7 +330,6 @@ class ParameterServerSession(Session):
         command = "python /home/joeri/Workspace/dist-keras/scripts/parameter_server.py "
         for parameter_key in parameters:
             command += parameter_key + "=" + str(parameters[parameter_key]) + " "
-        print(command)
         # Execute the command.
         os.system(command)
 
@@ -348,57 +341,30 @@ class WorkerSession(Session):
 
     def __init__(self):
         Session.__init__(self)
-        # Allocate a port for worker control.
+        # Reserve a port for worker control.
         socket, port = allocate_tcp_listening_port()
         self.control_socket = socket
         self.control_port = port
-        self.control_connection = None
-        # Worker instance.
-        self.worker = None
+        self.identifier = None
 
     def get_description(self):
         return (self.host_address, self.control_port)
 
     def process_parameters(self):
-        try:
-            #self.worker = Worker()
-            #self.worker.set_parameters(self.parameters)
-            print("Worker allocated")
-        except Exception as e:
-            print(e)
-
-    def handle_control_connection(self):
-        try:
-            conn, addr = self.control_socket.accept()
-            self.control_connection = conn
-            # Obtain parameter server information.
-            data = recv_data(conn)
-            parameter_servers = data['parameter_servers']
-            # Set the parameter server in the worker.
-            #self.worker.set_parameter_servers(parameter_servers)
-            # Send confirmation.
-            data = {'status': True}
-            send_data(conn, data)
-            # Wait for the job to tell us to start the training.
-            data = recv_data(conn)
-            if data['start']:
-                pass
-                #self.worker.start()
-        except Exception as e:
-            print(e)
+        self.identifier = self.parameters['worker_identifier']
 
     def run(self):
-        print("Worker running")
-        # Wait for a control connection.
-        self.handle_control_connection()
-        # Wait for the worker to finish.
-        #self.worker.join()
-        # Send the job that we're done.
-        data = {'done': True}
-        send_data(self.control_connection, data)
-        # Close the control port.
+        # Close the sockets for later reuse.
         self.control_socket.close()
-        self.control_connection.close()
+        # Run the subprocess.
+        parameters = {}
+        parameters['--identifier'] = self.identifier
+        parameters['--control-port'] = self.control_port
+        # Build the command.
+        command = "python /home/joeri/Workspace/dist-keras/scripts/worker.py "
+        for parameter_key in parameters:
+            command += parameter_key + "=" + str(parameters[parameter_key]) + " "
+        os.system(command)
 
 
 ## END Daemon sessions. ########################################################

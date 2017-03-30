@@ -10,17 +10,13 @@ from distkeras.networking import connect
 from distkeras.networking import recv_data
 from distkeras.networking import send_data
 
-from distkeras.utils import deserialize_keras_model_clean
+import tensorflow as tf
 
 from keras import backend as K
+
+from distkeras.utils import deserialize_keras_model
 
 import numpy as np
-
-import keras
-
-from keras import backend as K
-
-import tensorflow as tf
 
 import socket
 
@@ -49,7 +45,7 @@ class Worker(threading.Thread):
     def set_parameters(self, parameters):
         self.parameters = parameters
         self.batch_size = parameters['batch_size']
-        self.communication_frequency = parameters['communication_f']
+        self.communication_frequency = parameters['communication_frequency']
         self.identifier = parameters['worker_identifier']
         self.loss = parameters['loss']
         self.num_epochs = parameters['num_epochs']
@@ -63,12 +59,15 @@ class Worker(threading.Thread):
             fd = connect(ps[0], ps[1])
             self.ps_sockets.append(fd)
 
+    def set_model(self, model):
+        self.model = model
+
     def start(self):
         self.running = True
         super(Worker, self).start()
 
     def compile_model(self):
-        self.model = deserialize_keras_model_clean(self.parameters['model'])
+        self.model = deserialize_keras_model(self.model)
         self.model.compile(loss=self.loss,
                            optimizer=self.worker_optimizer,
                            metrics=['accuracy'])

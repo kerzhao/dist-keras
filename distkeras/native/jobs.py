@@ -371,7 +371,8 @@ class TrainingJob(Job):
         # Send worker ports.
         worker_information = [info[1] for info in self.parameter_servers]
         data = {'parameter_servers': worker_information,
-                'model': serialize_keras_model(self.model)}
+                'model': serialize_keras_model(self.model),
+                'parameters': self.parameters}
         send_data(fd, data)
         data = recv_data(fd)
         if data['status']:
