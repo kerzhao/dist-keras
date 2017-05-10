@@ -1,0 +1,270 @@
+[TerminalIPythonApp] WARNING | Subcommand `ipython notebook` is deprecated and will be removed in future versions.
+[TerminalIPythonApp] WARNING | You likely want to use `jupyter notebook` in the future
+[I 09:45:35.162 NotebookApp] Writing notebook server cookie secret to /run/user/1000/jupyter/notebook_cookie_secret
+[W 09:45:35.190 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using encryption. This is not recommended.
+[I 09:45:35.198 NotebookApp] Serving notebooks from local directory: /home/ubuntu/gtest/dist-keras
+[I 09:45:35.198 NotebookApp] 0 active kernels 
+[I 09:45:35.198 NotebookApp] The Jupyter Notebook is running at: http://[all ip addresses on your system]:1427/
+[I 09:45:35.198 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[I 09:45:47.373 NotebookApp] 302 GET /api/sessions?_=1494406124473 (218.241.251.148) 1.22ms
+[I 09:45:47.386 NotebookApp] 302 GET /api/terminals?_=1494406124474 (218.241.251.148) 0.66ms
+[I 09:45:48.092 NotebookApp] 302 GET /tree/examples (218.241.251.148) 0.61ms
+[W 09:45:55.584 NotebookApp] 401 POST /login?next=%2Ftree%2Fexamples (218.241.251.148) 2.60ms referer=http://ec2-13-124-96-230.ap-northeast-2.compute.amazonaws.com:1427/login?next=%2Ftree%2Fexamples
+[I 09:45:58.262 NotebookApp] 302 POST /login?next=%2Ftree%2Fexamples (218.241.251.148) 0.95ms
+[I 09:46:09.763 NotebookApp] Kernel started: 206ffed7-8c49-4baf-bb90-088c4a43a7c6
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+[Stage 2:>                                                          (0 + 3) / 3][Stage 2:===================>                                       (1 + 2) / 3][Stage 2:=======================================>                   (2 + 1) / 3]                                                                                [Stage 5:>                                                          (0 + 2) / 2]                                                                                Using TensorFlow backend.
+Using TensorFlow backend.
+17/05/10 09:47:58 ERROR Executor: Exception in task 0.0 in stage 7.0 (TID 10)
+org.apache.spark.api.python.PythonException: Traceback (most recent call last):
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 174, in main
+    process()
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 169, in process
+    serializer.dump_stream(func(split_index, iterator), outfile)
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/serializers.py", line 268, in dump_stream
+    vs = list(itertools.islice(iterator, batch))
+  File "/home/ubuntu/Download/spark-2.1.0/python/pyspark/rdd.py", line 1339, in takeUpToNumLeft
+    yield next(iterator)
+  File "/home/ubuntu/Download/dist-keras/distkeras/transformers.py", line 285, in _transform
+    label = row[self.input_column]
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/sql/types.py", line 1489, in __getitem__
+    raise ValueError(item)
+ValueError: label
+
+	at org.apache.spark.api.python.PythonRunner$$anon$1.read(PythonRDD.scala:193)
+	at org.apache.spark.api.python.PythonRunner$$anon$1.<init>(PythonRDD.scala:234)
+	at org.apache.spark.api.python.PythonRunner.compute(PythonRDD.scala:152)
+	at org.apache.spark.api.python.PythonRDD.compute(PythonRDD.scala:63)
+	at org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:323)
+	at org.apache.spark.rdd.RDD.iterator(RDD.scala:287)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+17/05/10 09:47:58 WARN TaskSetManager: Lost task 0.0 in stage 7.0 (TID 10, localhost, executor driver): org.apache.spark.api.python.PythonException: Traceback (most recent call last):
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 174, in main
+    process()
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 169, in process
+    serializer.dump_stream(func(split_index, iterator), outfile)
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/serializers.py", line 268, in dump_stream
+    vs = list(itertools.islice(iterator, batch))
+  File "/home/ubuntu/Download/spark-2.1.0/python/pyspark/rdd.py", line 1339, in takeUpToNumLeft
+    yield next(iterator)
+  File "/home/ubuntu/Download/dist-keras/distkeras/transformers.py", line 285, in _transform
+    label = row[self.input_column]
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/sql/types.py", line 1489, in __getitem__
+    raise ValueError(item)
+ValueError: label
+
+	at org.apache.spark.api.python.PythonRunner$$anon$1.read(PythonRDD.scala:193)
+	at org.apache.spark.api.python.PythonRunner$$anon$1.<init>(PythonRDD.scala:234)
+	at org.apache.spark.api.python.PythonRunner.compute(PythonRDD.scala:152)
+	at org.apache.spark.api.python.PythonRDD.compute(PythonRDD.scala:63)
+	at org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:323)
+	at org.apache.spark.rdd.RDD.iterator(RDD.scala:287)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+
+17/05/10 09:47:58 ERROR TaskSetManager: Task 0 in stage 7.0 failed 1 times; aborting job
+[I 09:48:11.129 NotebookApp] Saving file at /examples/mnist.ipynb
+17/05/10 09:50:07 WARN Utils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.debug.maxToStringFields' in SparkEnv.conf.
+[I 09:50:14.539 NotebookApp] Saving file at /examples/mnist.ipynb
+[I 09:52:23.414 NotebookApp] Saving file at /examples/mnist.ipynb
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+17/05/10 09:53:08 ERROR Executor: Exception in task 0.0 in stage 11.0 (TID 14)
+org.apache.spark.api.python.PythonException: Traceback (most recent call last):
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 174, in main
+    process()
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 169, in process
+    serializer.dump_stream(func(split_index, iterator), outfile)
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/serializers.py", line 268, in dump_stream
+    vs = list(itertools.islice(iterator, batch))
+  File "/home/ubuntu/Download/spark-2.1.0/python/pyspark/rdd.py", line 1339, in takeUpToNumLeft
+    yield next(iterator)
+  File "/home/ubuntu/Download/dist-keras/distkeras/transformers.py", line 285, in _transform
+    label = row[self.input_column]
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/sql/types.py", line 1489, in __getitem__
+    raise ValueError(item)
+ValueError: label
+
+	at org.apache.spark.api.python.PythonRunner$$anon$1.read(PythonRDD.scala:193)
+	at org.apache.spark.api.python.PythonRunner$$anon$1.<init>(PythonRDD.scala:234)
+	at org.apache.spark.api.python.PythonRunner.compute(PythonRDD.scala:152)
+	at org.apache.spark.api.python.PythonRDD.compute(PythonRDD.scala:63)
+	at org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:323)
+	at org.apache.spark.rdd.RDD.iterator(RDD.scala:287)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+17/05/10 09:53:08 WARN TaskSetManager: Lost task 0.0 in stage 11.0 (TID 14, localhost, executor driver): org.apache.spark.api.python.PythonException: Traceback (most recent call last):
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 174, in main
+    process()
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 169, in process
+    serializer.dump_stream(func(split_index, iterator), outfile)
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/serializers.py", line 268, in dump_stream
+    vs = list(itertools.islice(iterator, batch))
+  File "/home/ubuntu/Download/spark-2.1.0/python/pyspark/rdd.py", line 1339, in takeUpToNumLeft
+    yield next(iterator)
+  File "/home/ubuntu/Download/dist-keras/distkeras/transformers.py", line 285, in _transform
+    label = row[self.input_column]
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/sql/types.py", line 1489, in __getitem__
+    raise ValueError(item)
+ValueError: label
+
+	at org.apache.spark.api.python.PythonRunner$$anon$1.read(PythonRDD.scala:193)
+	at org.apache.spark.api.python.PythonRunner$$anon$1.<init>(PythonRDD.scala:234)
+	at org.apache.spark.api.python.PythonRunner.compute(PythonRDD.scala:152)
+	at org.apache.spark.api.python.PythonRDD.compute(PythonRDD.scala:63)
+	at org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:323)
+	at org.apache.spark.rdd.RDD.iterator(RDD.scala:287)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+
+17/05/10 09:53:08 ERROR TaskSetManager: Task 0 in stage 11.0 failed 1 times; aborting job
+Using TensorFlow backend.
+17/05/10 09:53:12 ERROR Executor: Exception in task 0.0 in stage 12.0 (TID 15)
+org.apache.spark.api.python.PythonException: Traceback (most recent call last):
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 174, in main
+    process()
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 169, in process
+    serializer.dump_stream(func(split_index, iterator), outfile)
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/serializers.py", line 268, in dump_stream
+    vs = list(itertools.islice(iterator, batch))
+  File "/home/ubuntu/Download/spark-2.1.0/python/pyspark/rdd.py", line 1339, in takeUpToNumLeft
+    yield next(iterator)
+  File "/home/ubuntu/Download/dist-keras/distkeras/transformers.py", line 285, in _transform
+    label = row[self.input_column]
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/sql/types.py", line 1489, in __getitem__
+    raise ValueError(item)
+ValueError: label
+
+	at org.apache.spark.api.python.PythonRunner$$anon$1.read(PythonRDD.scala:193)
+	at org.apache.spark.api.python.PythonRunner$$anon$1.<init>(PythonRDD.scala:234)
+	at org.apache.spark.api.python.PythonRunner.compute(PythonRDD.scala:152)
+	at org.apache.spark.api.python.PythonRDD.compute(PythonRDD.scala:63)
+	at org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:323)
+	at org.apache.spark.rdd.RDD.iterator(RDD.scala:287)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+17/05/10 09:53:12 WARN TaskSetManager: Lost task 0.0 in stage 12.0 (TID 15, localhost, executor driver): org.apache.spark.api.python.PythonException: Traceback (most recent call last):
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 174, in main
+    process()
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 169, in process
+    serializer.dump_stream(func(split_index, iterator), outfile)
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/serializers.py", line 268, in dump_stream
+    vs = list(itertools.islice(iterator, batch))
+  File "/home/ubuntu/Download/spark-2.1.0/python/pyspark/rdd.py", line 1339, in takeUpToNumLeft
+    yield next(iterator)
+  File "/home/ubuntu/Download/dist-keras/distkeras/transformers.py", line 285, in _transform
+    label = row[self.input_column]
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/sql/types.py", line 1489, in __getitem__
+    raise ValueError(item)
+ValueError: label
+
+	at org.apache.spark.api.python.PythonRunner$$anon$1.read(PythonRDD.scala:193)
+	at org.apache.spark.api.python.PythonRunner$$anon$1.<init>(PythonRDD.scala:234)
+	at org.apache.spark.api.python.PythonRunner.compute(PythonRDD.scala:152)
+	at org.apache.spark.api.python.PythonRDD.compute(PythonRDD.scala:63)
+	at org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:323)
+	at org.apache.spark.rdd.RDD.iterator(RDD.scala:287)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+
+17/05/10 09:53:12 ERROR TaskSetManager: Task 0 in stage 12.0 failed 1 times; aborting job
+[I 09:54:59.785 NotebookApp] Saving file at /examples/mnist.ipynb
+[I 09:57:54.603 NotebookApp] Saving file at /examples/mnist.ipynb
+[I 10:00:42.249 NotebookApp] Saving file at /examples/mnist.ipynb
+Using TensorFlow backend.
+17/05/10 10:01:42 ERROR Executor: Exception in task 0.0 in stage 13.0 (TID 16)
+org.apache.spark.api.python.PythonException: Traceback (most recent call last):
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 174, in main
+    process()
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 169, in process
+    serializer.dump_stream(func(split_index, iterator), outfile)
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/serializers.py", line 268, in dump_stream
+    vs = list(itertools.islice(iterator, batch))
+  File "/home/ubuntu/Download/spark-2.1.0/python/pyspark/rdd.py", line 1339, in takeUpToNumLeft
+    yield next(iterator)
+  File "/home/ubuntu/Download/dist-keras/distkeras/transformers.py", line 285, in _transform
+    label = row[self.input_column]
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/sql/types.py", line 1489, in __getitem__
+    raise ValueError(item)
+ValueError: label
+
+	at org.apache.spark.api.python.PythonRunner$$anon$1.read(PythonRDD.scala:193)
+	at org.apache.spark.api.python.PythonRunner$$anon$1.<init>(PythonRDD.scala:234)
+	at org.apache.spark.api.python.PythonRunner.compute(PythonRDD.scala:152)
+	at org.apache.spark.api.python.PythonRDD.compute(PythonRDD.scala:63)
+	at org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:323)
+	at org.apache.spark.rdd.RDD.iterator(RDD.scala:287)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+17/05/10 10:01:42 WARN TaskSetManager: Lost task 0.0 in stage 13.0 (TID 16, localhost, executor driver): org.apache.spark.api.python.PythonException: Traceback (most recent call last):
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 174, in main
+    process()
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/worker.py", line 169, in process
+    serializer.dump_stream(func(split_index, iterator), outfile)
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/serializers.py", line 268, in dump_stream
+    vs = list(itertools.islice(iterator, batch))
+  File "/home/ubuntu/Download/spark-2.1.0/python/pyspark/rdd.py", line 1339, in takeUpToNumLeft
+    yield next(iterator)
+  File "/home/ubuntu/Download/dist-keras/distkeras/transformers.py", line 285, in _transform
+    label = row[self.input_column]
+  File "/home/ubuntu/Download/spark-2.1.0/python/lib/pyspark.zip/pyspark/sql/types.py", line 1489, in __getitem__
+    raise ValueError(item)
+ValueError: label
+
+	at org.apache.spark.api.python.PythonRunner$$anon$1.read(PythonRDD.scala:193)
+	at org.apache.spark.api.python.PythonRunner$$anon$1.<init>(PythonRDD.scala:234)
+	at org.apache.spark.api.python.PythonRunner.compute(PythonRDD.scala:152)
+	at org.apache.spark.api.python.PythonRDD.compute(PythonRDD.scala:63)
+	at org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:323)
+	at org.apache.spark.rdd.RDD.iterator(RDD.scala:287)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:282)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+
+17/05/10 10:01:42 ERROR TaskSetManager: Task 0 in stage 13.0 failed 1 times; aborting job
+[I 10:02:49.115 NotebookApp] Saving file at /examples/mnist.ipynb
+[I 10:02:57.852 NotebookApp] Saving file at /examples/mnist.ipynb
+[I 10:02:59.474 NotebookApp] Saving file at /examples/mnist.ipynb
+[I 10:03:01.340 NotebookApp] Kernel interrupted: 206ffed7-8c49-4baf-bb90-088c4a43a7c6
+[I 10:03:03.764 NotebookApp] KernelRestarter: restarting kernel (1/5)
+WARNING:root:kernel 206ffed7-8c49-4baf-bb90-088c4a43a7c6 restarted
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+[I 10:03:09.228 NotebookApp] Saving file at /examples/mnist.ipynb
