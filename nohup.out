@@ -1,0 +1,202 @@
+[TerminalIPythonApp] WARNING | Subcommand `ipython notebook` is deprecated and will be removed in future versions.
+[TerminalIPythonApp] WARNING | You likely want to use `jupyter notebook` in the future
+[I 09:27:41.725 NotebookApp] Writing notebook server cookie secret to /run/user/1000/jupyter/notebook_cookie_secret
+[W 09:27:41.754 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using encryption. This is not recommended.
+[I 09:27:41.762 NotebookApp] Serving notebooks from local directory: /home/ubuntu/gtest/dist-keras
+[I 09:27:41.762 NotebookApp] 0 active kernels 
+[I 09:27:41.762 NotebookApp] The Jupyter Notebook is running at: http://[all ip addresses on your system]:1427/
+[I 09:27:41.762 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[I 09:27:48.320 NotebookApp] 302 GET /api/sessions?_=1494562070292 (218.241.251.148) 1.26ms
+[I 09:27:48.326 NotebookApp] 302 GET /api/terminals?_=1494562070293 (218.241.251.148) 0.65ms
+[I 09:27:49.255 NotebookApp] 302 GET /tree/bin (218.241.251.148) 0.46ms
+[I 09:27:52.927 NotebookApp] 302 POST /login?next=%2Ftree%2Fbin (218.241.251.148) 0.97ms
+[W 09:27:53.108 NotebookApp] 404 GET /tree/bin (218.241.251.148) 6.53ms referer=http://ec2-52-79-153-231.ap-northeast-2.compute.amazonaws.com:1427/login?next=%2Ftree%2Fbin
+[I 09:27:59.398 NotebookApp] 302 GET / (218.241.251.148) 0.37ms
+[W 09:28:04.029 NotebookApp] 404 GET /edit/bin/wingdb.py (218.241.251.148): File does not exist: bin/wingdb.py
+[W 09:28:04.029 NotebookApp] 404 GET /edit/bin/wingdb.py (218.241.251.148) 1.29ms referer=http://ec2-52-79-153-231.ap-northeast-2.compute.amazonaws.com:1427/tree/bin
+[C 09:56:37.433 NotebookApp] received signal 15, stopping
+[I 09:56:37.433 NotebookApp] Shutting down kernels
+[TerminalIPythonApp] WARNING | Subcommand `ipython notebook` is deprecated and will be removed in future versions.
+[TerminalIPythonApp] WARNING | You likely want to use `jupyter notebook` in the future
+[I 05:32:10.831 NotebookApp] Writing notebook server cookie secret to /run/user/1000/jupyter/notebook_cookie_secret
+[W 05:32:10.851 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using encryption. This is not recommended.
+[I 05:32:10.945 NotebookApp] Serving notebooks from local directory: /home/ubuntu/gtest/dist-keras
+[I 05:32:10.945 NotebookApp] 0 active kernels 
+[I 05:32:10.945 NotebookApp] The Jupyter Notebook is running at: http://[all ip addresses on your system]:1427/
+[I 05:32:10.945 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[I 05:32:14.078 NotebookApp] 302 GET / (218.241.251.148) 0.60ms
+[I 05:32:14.204 NotebookApp] 302 GET /tree? (218.241.251.148) 0.81ms
+[I 05:32:25.558 NotebookApp] 302 POST /login?next=%2Ftree%3F (218.241.251.148) 1.12ms
+[I 05:32:44.994 NotebookApp] Copying examples/workflow.ipynb to /examples
+[W 05:32:45.094 NotebookApp] Notebook examples/workflow.ipynb is not trusted
+[W 05:32:45.119 NotebookApp] Saving untrusted notebook examples/workflow-Copy1.ipynb
+[W 05:33:14.326 NotebookApp] Notebook examples/workflow-Copy1.ipynb is not trusted
+[I 05:33:18.935 NotebookApp] Kernel started: 58ebcddd-b5b9-4eb4-b69d-5e6c0073cf7a
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+[W 05:34:03.310 NotebookApp] 404 GET /nbextensions/widgets/notebook/js/extension.js?v=20170515053210 (218.241.251.148) 8.56ms referer=http://ec2-13-124-50-155.ap-northeast-2.compute.amazonaws.com:1427/notebooks/examples/workflow-Copy1.ipynb
+[Stage 2:>                                                          (0 + 2) / 2][I 05:35:17.252 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[W 05:35:17.253 NotebookApp] Saving untrusted notebook examples/workflow-jobs-test.ipynb
+                                                                                17/05/15 05:35:21 WARN Utils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.debug.maxToStringFields' in SparkEnv.conf.
+[Stage 4:>                                                          (0 + 4) / 4][Stage 4:==============>                                            (1 + 3) / 4][Stage 4:============================================>              (3 + 1) / 4]                                                                                Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+[Stage 14:>                                                         (0 + 4) / 4][Stage 14:==============>                                           (1 + 3) / 4]                                                                                [I 05:37:05.584 NotebookApp] Kernel started: f57a23a8-d170-4b25-b207-fce79a5eebfb
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+17/05/15 05:37:08 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+[I 05:37:25.570 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[W 05:37:40.273 NotebookApp] Notebook examples/mnist_analysis.ipynb is not trusted
+[I 05:37:41.420 NotebookApp] Kernel started: c60d4b31-9105-4ecc-949d-5a4c6d608cd8
+[W 05:37:41.812 NotebookApp] Notebook examples/mnist_preprocessing.ipynb is not trusted
+[I 05:37:42.582 NotebookApp] Kernel started: 36bf78d3-e2b4-498f-bd7a-0171a8caaec6
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+17/05/15 05:37:44 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+17/05/15 05:37:44 WARN Utils: Service 'SparkUI' could not bind on port 4041. Attempting port 4042.
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+17/05/15 05:37:45 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+17/05/15 05:37:45 WARN Utils: Service 'SparkUI' could not bind on port 4041. Attempting port 4042.
+17/05/15 05:37:45 WARN Utils: Service 'SparkUI' could not bind on port 4042. Attempting port 4043.
+[I 05:38:25.663 NotebookApp] Kernel started: 04f440a3-87c4-4cad-9b74-4115892b4098
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+17/05/15 05:38:28 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+17/05/15 05:38:28 WARN Utils: Service 'SparkUI' could not bind on port 4041. Attempting port 4042.
+17/05/15 05:38:28 WARN Utils: Service 'SparkUI' could not bind on port 4042. Attempting port 4043.
+17/05/15 05:38:28 WARN Utils: Service 'SparkUI' could not bind on port 4043. Attempting port 4044.
+[W 05:39:02.592 NotebookApp] Notebook examples/mnist.ipynb is not trusted
+[I 05:39:04.588 NotebookApp] Kernel started: e65ea58c-63b3-496b-b461-c90fe7e33dfd
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+17/05/15 05:39:07 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+17/05/15 05:39:07 WARN Utils: Service 'SparkUI' could not bind on port 4041. Attempting port 4042.
+17/05/15 05:39:07 WARN Utils: Service 'SparkUI' could not bind on port 4042. Attempting port 4043.
+17/05/15 05:39:07 WARN Utils: Service 'SparkUI' could not bind on port 4043. Attempting port 4044.
+17/05/15 05:39:07 WARN Utils: Service 'SparkUI' could not bind on port 4044. Attempting port 4045.
+[W 05:39:16.262 NotebookApp] WebSocket ping timeout after 90000 ms.
+[I 05:41:17.118 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 05:43:41.240 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+2017-05-15 05:46:07.779856: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 05:46:07.779888: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 05:46:07.779895: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 05:46:07.779900: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 05:46:07.779905: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+[I 05:48:08.864 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 05:51:31.663 NotebookApp] Kernel interrupted: 58ebcddd-b5b9-4eb4-b69d-5e6c0073cf7a
+[I 05:52:01.756 NotebookApp] Kernel interrupted: 58ebcddd-b5b9-4eb4-b69d-5e6c0073cf7a
+[I 05:52:26.532 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 05:53:51.641 NotebookApp] Kernel restarted: 58ebcddd-b5b9-4eb4-b69d-5e6c0073cf7a
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+[Stage 2:>                                                          (0 + 2) / 2]                                                                                17/05/15 05:54:19 WARN Utils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.debug.maxToStringFields' in SparkEnv.conf.
+[Stage 4:>                                                          (0 + 4) / 4][Stage 4:==============>                                            (1 + 3) / 4]                                                                                [Stage 5:==============>                                            (1 + 3) / 4]                                                                                Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+[Stage 14:>                                                         (0 + 4) / 4][Stage 14:=============================>                            (2 + 2) / 4]                                                                                2017-05-15 05:54:56.216065: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 05:54:56.216092: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 05:54:56.216098: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 05:54:56.216103: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 05:54:56.216108: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+[I 05:55:44.639 NotebookApp] Kernel restarted: 58ebcddd-b5b9-4eb4-b69d-5e6c0073cf7a
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+[Stage 2:>                                                          (0 + 2) / 2]                                                                                17/05/15 05:56:25 WARN Utils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.debug.maxToStringFields' in SparkEnv.conf.
+[Stage 4:>                                                          (0 + 4) / 4][Stage 4:==============>                                            (1 + 3) / 4][Stage 4:=============================>                             (2 + 2) / 4]                                                                                [Stage 5:=============================>                             (2 + 2) / 4]                                                                                [Stage 9:=============================>                             (2 + 2) / 4]                                                                                Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+[Stage 14:>                                                         (0 + 4) / 4][Stage 14:===========================================>              (3 + 1) / 4]                                                                                [I 05:56:47.426 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+2017-05-15 05:56:50.088523: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 05:56:50.088549: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 05:56:50.088555: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 05:56:50.088560: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 05:56:50.088565: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+[I 06:01:02.805 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 06:02:10.862 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 06:02:17.867 NotebookApp] Kernel restarted: 58ebcddd-b5b9-4eb4-b69d-5e6c0073cf7a
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+[Stage 2:>                                                          (0 + 2) / 2]                                                                                17/05/15 06:02:47 WARN Utils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.debug.maxToStringFields' in SparkEnv.conf.
+[Stage 4:>                                                          (0 + 4) / 4][Stage 4:==============>                                            (1 + 3) / 4]                                                                                [Stage 5:>                                                          (0 + 4) / 4]                                                                                [Stage 9:==============>                                            (1 + 3) / 4]                                                                                Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+[Stage 14:>                                                         (0 + 4) / 4]Using TensorFlow backend.
+Using TensorFlow backend.
+[Stage 14:==============>                                           (1 + 3) / 4]                                                                                2017-05-15 06:03:09.147885: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 06:03:09.147918: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 06:03:09.147924: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 06:03:09.147929: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 06:03:09.147934: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+[Stage 17:>                                                         (0 + 2) / 2][Stage 17:=============================>                            (1 + 1) / 2]                                                                                [Stage 19:>                                                         (0 + 4) / 4][Stage 19:==============>                                           (1 + 3) / 4]                                                                                [I 06:04:30.071 NotebookApp] Kernel restarted: 58ebcddd-b5b9-4eb4-b69d-5e6c0073cf7a
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+[Stage 2:>                                                          (0 + 2) / 2]                                                                                17/05/15 06:04:49 WARN Utils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.debug.maxToStringFields' in SparkEnv.conf.
+[Stage 4:>                                                          (0 + 4) / 4][Stage 4:==============>                                            (1 + 3) / 4]                                                                                [Stage 5:==============>                                            (1 + 3) / 4]                                                                                Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+[Stage 14:>                                                         (0 + 4) / 4]Using TensorFlow backend.
+                                                                                2017-05-15 06:05:14.022468: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 06:05:14.022498: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 06:05:14.022510: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 06:05:14.022515: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 06:05:14.022520: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+[I 06:05:29.232 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 06:09:46.970 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 06:14:15.845 NotebookApp] Kernel interrupted: 58ebcddd-b5b9-4eb4-b69d-5e6c0073cf7a
+[I 06:22:09.978 NotebookApp] Kernel interrupted: 58ebcddd-b5b9-4eb4-b69d-5e6c0073cf7a
+[I 06:22:45.398 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 06:27:06.164 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 06:31:25.637 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 06:35:45.518 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 06:40:05.535 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 06:44:25.428 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 06:48:45.739 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 07:45:04.755 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[W 07:45:23.233 NotebookApp] Notebook examples/mnist_preprocessing.ipynb is not trusted
+[I 07:47:24.869 NotebookApp] Kernel interrupted: 58ebcddd-b5b9-4eb4-b69d-5e6c0073cf7a
+[I 07:47:43.185 NotebookApp] Kernel interrupted: 58ebcddd-b5b9-4eb4-b69d-5e6c0073cf7a
+[I 07:49:24.848 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 07:49:40.269 NotebookApp] Kernel restarted: 58ebcddd-b5b9-4eb4-b69d-5e6c0073cf7a
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+[Stage 2:>                                                          (0 + 2) / 2]                                                                                17/05/15 07:50:03 WARN Utils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.debug.maxToStringFields' in SparkEnv.conf.
+[Stage 4:>                                                          (0 + 4) / 4][Stage 4:==============>                                            (1 + 3) / 4]                                                                                [Stage 7:============================================>              (3 + 1) / 4]                                                                                Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+Using TensorFlow backend.
+[Stage 14:>                                                         (0 + 4) / 4]Using TensorFlow backend.
+[Stage 14:===========================================>              (3 + 1) / 4]                                                                                [Stage 15:>                                                         (0 + 4) / 4][Stage 15:===========================================>              (3 + 1) / 4][Stage 16:>                                                       (0 + 4) / 200]SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+[Stage 16:>                                                       (1 + 4) / 200][Stage 16:===>                                                   (14 + 4) / 200][Stage 16:======>                                                (25 + 4) / 200][Stage 16:===========>                                           (41 + 4) / 200][Stage 16:===============>                                       (55 + 4) / 200][Stage 16:====================>                                  (73 + 4) / 200][Stage 16:========================>                              (89 + 4) / 200][Stage 16:=============================>                        (108 + 4) / 200][Stage 16:===================================>                  (130 + 4) / 200][Stage 16:=======================================>              (147 + 4) / 200][Stage 16:============================================>         (166 + 4) / 200][Stage 16:==================================================>   (188 + 4) / 200]                                                                                [Stage 18:====================>                                  (76 + 4) / 200][Stage 18:===========================>                           (99 + 4) / 200][Stage 18:===================================>                  (130 + 4) / 200][Stage 18:==========================================>           (156 + 4) / 200][Stage 18:=================================================>    (183 + 4) / 200]                                                                                2017-05-15 07:52:11.788696: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 07:52:11.788723: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 07:52:11.788729: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 07:52:11.788734: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-05-15 07:52:11.788739: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+[I 07:53:45.352 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
+[I 07:58:04.649 NotebookApp] Saving file at /examples/workflow-jobs-test.ipynb
