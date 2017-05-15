@@ -3,7 +3,6 @@ requests and execute them on the local cluster.
 
 Author: Joeri Hermans
 """
-
 ## BEGIN Imports. ##############################################################
 
 from distkeras.job_deployment import Job

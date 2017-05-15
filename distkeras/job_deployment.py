@@ -254,6 +254,8 @@ with open(home + "/trainers/" + secret, "r") as f:
 # Train the model, and save it afterwards.
 trained_model = trainer.train(dataset)
 with open(home + "/models/" + secret, "w") as f:
+    import pdb
+    pdb.set_trace()
     f.write(pickle_object(serialize_keras_model(trained_model)))
 # Save the history of the training process.
 histories = trainer.get_history()
