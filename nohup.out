@@ -1,0 +1,18 @@
+[TerminalIPythonApp] WARNING | Subcommand `ipython notebook` is deprecated and will be removed in future versions.
+[TerminalIPythonApp] WARNING | You likely want to use `jupyter notebook` in the future
+[I 09:27:41.725 NotebookApp] Writing notebook server cookie secret to /run/user/1000/jupyter/notebook_cookie_secret
+[W 09:27:41.754 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using encryption. This is not recommended.
+[I 09:27:41.762 NotebookApp] Serving notebooks from local directory: /home/ubuntu/gtest/dist-keras
+[I 09:27:41.762 NotebookApp] 0 active kernels 
+[I 09:27:41.762 NotebookApp] The Jupyter Notebook is running at: http://[all ip addresses on your system]:1427/
+[I 09:27:41.762 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[I 09:27:48.320 NotebookApp] 302 GET /api/sessions?_=1494562070292 (218.241.251.148) 1.26ms
+[I 09:27:48.326 NotebookApp] 302 GET /api/terminals?_=1494562070293 (218.241.251.148) 0.65ms
+[I 09:27:49.255 NotebookApp] 302 GET /tree/bin (218.241.251.148) 0.46ms
+[I 09:27:52.927 NotebookApp] 302 POST /login?next=%2Ftree%2Fbin (218.241.251.148) 0.97ms
+[W 09:27:53.108 NotebookApp] 404 GET /tree/bin (218.241.251.148) 6.53ms referer=http://ec2-52-79-153-231.ap-northeast-2.compute.amazonaws.com:1427/login?next=%2Ftree%2Fbin
+[I 09:27:59.398 NotebookApp] 302 GET / (218.241.251.148) 0.37ms
+[W 09:28:04.029 NotebookApp] 404 GET /edit/bin/wingdb.py (218.241.251.148): File does not exist: bin/wingdb.py
+[W 09:28:04.029 NotebookApp] 404 GET /edit/bin/wingdb.py (218.241.251.148) 1.29ms referer=http://ec2-52-79-153-231.ap-northeast-2.compute.amazonaws.com:1427/tree/bin
+[C 09:56:37.433 NotebookApp] received signal 15, stopping
+[I 09:56:37.433 NotebookApp] Shutting down kernels
