@@ -169,6 +169,8 @@ print "test 13"
 (training_set, test_set) = dataset.randomSplit([0.6, 0.4])
 training_set.cache()
 test_set.cache()
+training_set.write.save("data_path/training_set.parquet", format="parquet")
+test_set.write.save("data_path/test_set.parquet", format="parquet")
 print "test 14"
 model = Sequential()
 model.add(Dense(500, input_shape=(nb_features,)))
@@ -218,7 +220,7 @@ print "test 16"
 trainer = AEASGD(keras_model=model, worker_optimizer=optimizer, loss=loss, num_workers=num_workers, 
                  batch_size=32, features_col="features_normalized", label_col="newlabel", num_epoch=1,
                  communication_window=32, rho=5.0, learning_rate=0.1)
-trainer.set_parallelism_factor(1)
+trainer.set_parallelism_factor(10)
 print "test 17"
 job = Job("3Q20LA3MXU3N8Y9NVJ7A1T5WNHL2IWQSNNJ5V9I5P7MRJ8LSC33EN2DT3EWYLCJA",
           "user1",
@@ -227,7 +229,7 @@ job = Job("3Q20LA3MXU3N8Y9NVJ7A1T5WNHL2IWQSNNJ5V9I5P7MRJ8LSC33EN2DT3EWYLCJA",
           16,
           trainer)
 print "test 18"
-job.send('http://ec2-13-124-109-95.ap-northeast-2.compute.amazonaws.com:8000')
+job.send('http://ec2-52-79-167-118.ap-northeast-2.compute.amazonaws.com:8000')
 print "test 19"
 job.wait_completion()
 print "test 20"
