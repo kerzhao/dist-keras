@@ -38,7 +38,8 @@ if local:
     num_executors = 1
 else:
     # Tell master to use YARN.
-    master = "yarn-client"
+    master = "yarn"
+    deploymode = "client"
     num_executors = 6
     num_cores = 2
     
@@ -58,6 +59,7 @@ os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages com.databricks:spark-csv_2.10:1.
 conf = SparkConf()
 conf.set("spark.app.name", application_name)
 conf.set("spark.master", master)
+conf.set("spark.submit.deployMode", deploymode)
 conf.set("spark.executor.cores", `num_cores`)
 conf.set("spark.executor.instances", `num_executors`)
 conf.set("spark.locality.wait", "0")
