@@ -38,7 +38,16 @@ if local:
     num_executors = 1
 else:
     # Tell master to use YARN.
+<<<<<<< HEAD
     master = "yarn-client"
+=======
+<<<<<<< HEAD
+    master = "yarn-client"
+=======
+    master = "yarn"
+    deploymode = "client"
+>>>>>>> e3f94d75c2ca136c1b6e55e522da926daaad2bc6
+>>>>>>> 99246d56a3d196e3ea31040262bae82387d965f6
     num_executors = 6
     num_cores = 2
     
@@ -58,6 +67,13 @@ os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages com.databricks:spark-csv_2.10:1.
 conf = SparkConf()
 conf.set("spark.app.name", application_name)
 conf.set("spark.master", master)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+conf.set("spark.submit.deployMode", deploymode)
+>>>>>>> e3f94d75c2ca136c1b6e55e522da926daaad2bc6
+>>>>>>> 99246d56a3d196e3ea31040262bae82387d965f6
 conf.set("spark.executor.cores", `num_cores`)
 conf.set("spark.executor.instances", `num_executors`)
 conf.set("spark.locality.wait", "0")
@@ -219,7 +235,15 @@ job = Job("3Q20LA3MXU3N8Y9NVJ7A1T5WNHL2IWQSNNJ5V9I5P7MRJ8LSC33EN2DT3EWYLCJA",
           1,
           16,
           trainer)
+<<<<<<< HEAD
 job.send('http://ec2-52-79-121-94.ap-northeast-2.compute.amazonaws.com:8000')
+=======
+<<<<<<< HEAD
+job.send('http://ec2-52-79-121-94.ap-northeast-2.compute.amazonaws.com:8000')
+=======
+job.send('http://ec2-13-124-109-95.ap-northeast-2.compute.amazonaws.com:8000')
+>>>>>>> e3f94d75c2ca136c1b6e55e522da926daaad2bc6
+>>>>>>> 99246d56a3d196e3ea31040262bae82387d965f6
 job.wait_completion()
 trained_model = job.get_trained_model()
 history = job.get_history()        
