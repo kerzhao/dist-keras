@@ -7,6 +7,11 @@ import time
 
 import requests
 
+import tensorflow as tf
+#sess = tf.Session()
+from keras import backend as K
+#K.set_session(sess)
+
 from keras.optimizers import *
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation
@@ -182,6 +187,12 @@ model.add(Dense(nb_classes))
 model.add(Activation('softmax'))
 
 model.summary()
+
+print "test 14_1"
+
+from distkeras.job_deployment import graph
+graph.append(tf.get_default_graph())
+
 print "test 15"
 optimizer = 'adagrad'
 loss = 'categorical_crossentropy'
@@ -220,6 +231,7 @@ print "test 16"
 trainer = AEASGD(keras_model=model, worker_optimizer=optimizer, loss=loss, num_workers=num_workers, 
                  batch_size=32, features_col="features_normalized", label_col="newlabel", num_epoch=1,
                  communication_window=32, rho=5.0, learning_rate=0.1)
+print "test 16_1"
 trainer.set_parallelism_factor(10)
 print "test 17"
 job = Job("3Q20LA3MXU3N8Y9NVJ7A1T5WNHL2IWQSNNJ5V9I5P7MRJ8LSC33EN2DT3EWYLCJA",
@@ -229,7 +241,7 @@ job = Job("3Q20LA3MXU3N8Y9NVJ7A1T5WNHL2IWQSNNJ5V9I5P7MRJ8LSC33EN2DT3EWYLCJA",
           16,
           trainer)
 print "test 18"
-job.send('http://ec2-52-79-167-118.ap-northeast-2.compute.amazonaws.com:8000')
+job.send('http://ec2-13-124-140-71.ap-northeast-2.compute.amazonaws.com:8000')
 print "test 19"
 job.wait_completion()
 print "test 20"
