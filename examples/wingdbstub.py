@@ -57,7 +57,8 @@ kWingDebugDisabled = 0
 # Host:port of the IDE within which to debug: As configured in the IDE
 # with the Server Port preference
 # (WINGDB_HOSTPORT environment variable)
-kWingHostPort = 'ec2-52-79-153-231.ap-northeast-2.compute.amazonaws.com:50005'
+# kWingHostPort = '124.202.206.158:50005'
+kWingHostPort = 'localhost:50005'
 
 # Port on which to listen for connection requests, so that the
 # IDE can (re)attach to the debug process after it has started
